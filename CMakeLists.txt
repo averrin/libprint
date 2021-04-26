@@ -10,10 +10,6 @@ include(cmake/CPM.cmake)
 CPMAddPackage("gh:fmtlib/fmt#7.1.3")
 
 include_directories("include")
-# target_include_directories(libprint INTERFACE
-#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-#     $<INSTALL_INTERFACE:include> )
 
 add_executable(${EXE_NAME} libprint_test.cpp)
 target_link_libraries(libprint PRIVATE fmt)
-# target_link_libraries(liblog PRIVATE fmt::fmt-header-only)

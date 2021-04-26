@@ -28,6 +28,24 @@ namespace LibPrint {
 
 class utils {
 public:
+  static int realLength(std::string s) {
+    return std::wstring_convert<std::codecvt_utf8<wchar_t>>()
+        .from_bytes(utils::stripEsc(s))
+        .size();
+  }
+  static std::string repeat(std::string s, int n) {
+    std::ostringstream os;
+    for (int i = 0; i < n; i++)
+      os << s;
+    return os.str();
+  }
+  static void br() { fmt::print("\n"); }
+  static void up(int n = 1) { fmt::print("\e[{}A", n); }
+  static void clearLine() { fmt::print("\e[2K"); }
+
+  static void saveCursor() { fmt::print("\e7"); }
+  static void restoreCursor() { fmt::print("\e8"); }
+
   static void h1(std::string text) {
     fmt::print("\n{:━^80}\n\n", utils::bold(" {} ", text));
   }
@@ -376,6 +394,8 @@ public:
     auto align = states.top().align;
     auto bgColor = states.top().bgColor;
     auto width = states.top().width;
+    if (width <= 0)
+      return;
 
     auto f = content.size() - utils::stripEsc(content).size();
     switch (align) {
@@ -422,15 +442,13 @@ public:
     } else {
       auto c = gutter.states.top().content;
       gutter.push(mark);
-      auto id = std::wstring_convert<std::codecvt_utf8<wchar_t>>()
-                    .from_bytes(utils::stripEsc(mark))
-                    .size() -
-                std::wstring_convert<std::codecvt_utf8<wchar_t>>()
-                    .from_bytes(utils::stripEsc(c))
-                    .size();
-      indentGutter.push(indentGutter.states.top().width - id);
+      auto id = utils::realLength(mark) - utils::realLength(c);
+      auto iw = indentGutter.states.top().width;
+      if (iw > id)
+        indentGutter.push(iw - id);
       println(fmt_string, std::forward<const Args &>(args)...);
-      indentGutter.pop();
+      if (iw > id)
+        indentGutter.pop();
       gutter.pop();
     }
   }
@@ -476,6 +494,7 @@ public:
   Printer(int i = 0) : indent(i) {
     indentGutter.push(indent);
     leftGutter.enabled = false;
+    gutter.enabled = true;
     rightGutter.enabled = false;
   }
 };
@@ -547,6 +566,30 @@ public:
     auto m = utils::italic(utils::color(fgColor, mark));
     setGutter(Gutter(m, mark.size()));
     gutter.push(Align::RIGHT);
+  }
+};
+
+class PrinterWithStatusBar : public Printer {
+public:
+  int barWidth = 80;
+  std::string statusBarChars = utils::yellow("");
+  std::string statusBar = "";
+  PrinterWithStatusBar() : Printer() { rebuild(); }
+  void rebuild() {
+    statusBar = utils::repeat(statusBarChars,
+                              barWidth / utils::realLength(statusBarChars));
+  }
+  template <typename S, typename... Args>
+  void println(const S &fmt_string, const Args &... args) {
+    utils::up();
+    utils::clearLine();
+    Printer::println(fmt_string, std::forward<const Args &>(args)...);
+    Printer::println(statusBar);
+  }
+  void update() {
+    utils::up();
+    utils::clearLine();
+    Printer::println(statusBar);
   }
 };
 

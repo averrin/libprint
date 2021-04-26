@@ -93,31 +93,46 @@ void markup() {
   fmt::print("\n");
 };
 
-int main() {
-  // formatting();
-  // rules();
-  // markup();
+void comments() {
+
+  auto cmt = CommentPrinter();
+  utils::h2("Comments Printer");
+  helpers::comment("comment line1", "comment line2");
+
+  cmt.printBlock("this is multiline comment\nline1\n"
+                 "<red>FIXME:</red> markup breaks gray color of the line\n"
+                 "line3");
+
+  cmt.fgColor = fmt::color::dark_green;
+  cmt.mark = "#";
+  cmt.println("python-like comment");
+  utils::br();
+}
+
+void printer() {
   utils::h1("Printer examples");
   auto p = Printer();
-  auto cmt = CommentPrinter();
   p.print("Simple printer print");
-  p.print("\n");
+  utils::br();
   p.println("Simple printer println");
   p = Printer(3);
   p.print("Indented print (no gutter)");
-  p.print("\n");
+  utils::br();
   p.println("Indented println");
   helpers::indent(6, "indent helper", "indented line 2", "indented line 3");
 
-  p.println();
+  utils::br();
   helpers::quote("quoted line", "quoted line 2");
-  p.println();
+  utils::br();
   helpers::aligned(Align::LEFT, 80, "<blue>left</blue> line", "left line 2");
   helpers::aligned(Align::MIDDLE, 80, "<green>middle</green> line",
                    "middle line 2");
   helpers::aligned(Align::RIGHT, 80, "<yellow>right</yellow> line",
                    "right line 2");
+}
 
+void gutter() {
+  auto p = Printer(1);
   utils::h2("Gutter align");
   p.indent = 0;
   p.gutter.push(3, utils::green("┃"), Align::LEFT);
@@ -127,7 +142,7 @@ int main() {
   p.gutter.push(Align::RIGHT);
   p.println("right aligned gutter");
   p.indent = 1;
-  cmt.println("you need have gutter wider than 1");
+  helpers::comment("you need have gutter wider than 1");
   p.gutter.clear();
 
   utils::h2("Gutter examples");
@@ -137,8 +152,10 @@ int main() {
   p.println("line 3");
   p.gutter.clear();
 
-  p.println();
+  utils::br();
   utils::h3("Marks default");
+  p.gutter.push(1);
+  p.indent = 1;
   p.markLine("<b><blue>*</blue></b>"_p, "symbol marked line");
   p.println("not marked");
   p.markLine("<b><green>✓</blue></b>"_p, "checked with unicode symbol");
@@ -150,9 +167,9 @@ int main() {
   }
   p.gutter.pop();
 
-  p.println();
+  utils::br();
   utils::h3("Marks left & right gutters");
-  p.println();
+  utils::br();
   auto gp = Printer(1);
   gp.rightGutter.enabled = true;
   gp.leftGutter.enabled = true;
@@ -160,9 +177,9 @@ int main() {
   gp.markLine(fmt::color::cyan, "color marked line");
   gp.markLine("<b><blue>*</blue></b>"_p, "symbol marked line");
 
-  p.println();
+  utils::br();
   utils::h3("More examples");
-  p.println();
+  utils::br();
   p.setGutter(Gutter(" ")); // reserve place for vertical line
   p.println(utils::rule(60, fmt::rgb(70, 70, 70), false, true));
 
@@ -186,7 +203,9 @@ int main() {
   helpers::with_gutter({4, utils::magenta("│"), Align::LEFT},
                        "<b><color=#ffd700>Header text</color></b>",
                        fmt::format("<i><color=#505050>{}</color></i>", tstamp));
+}
 
+void numbered() {
   utils::h2("Numbered Printer");
   auto ln = NumberedPrinter();
   ln.rightGutter.enabled = true;
@@ -212,16 +231,89 @@ int main() {
     ln.println("numbered line");
   }
   helpers::numbered(105, "and with helper");
+}
 
-  utils::h2("Comments Printer");
-  helpers::comment("comment line1", "comment line2");
+void vt() {
+  auto p = Printer();
+  utils::h2("VT examples");
+  p.println("<b><green>green line</green></b>");
+  utils::up();
+  p.println("XXXXX");
 
-  cmt.printBlock("this is multiline comment\nline1\n"
-                 "<red>FIXME:</red> markup breaks gray color of the line\n"
-                 "line3");
+  p.println("<b><green>green line</green></b>");
+  utils::up();
+  utils::clearLine();
+  p.println("<red>red line</red>");
 
-  cmt.fgColor = fmt::color::dark_green;
-  cmt.mark = "#";
-  cmt.println("python-like comment");
-  p.println();
+  utils::saveCursor();
+  p.print("<b><green>green line</green></b>");
+  utils::restoreCursor();
+  p.print("<b><blue>green line</blue></b>");
+  utils::br();
+}
+
+void statusbar() {
+  utils::h2("Printer with status bar");
+  auto p = PrinterWithStatusBar();
+  using namespace std::chrono;
+  auto delay = 200ms;
+  p.println("one");
+  std::this_thread::sleep_for(delay);
+  p.println("two");
+  std::this_thread::sleep_for(delay);
+  p.println("three");
+  std::this_thread::sleep_for(delay);
+  p.println("four");
+  std::this_thread::sleep_for(delay);
+  p.println("five");
+
+  std::this_thread::sleep_for(delay);
+  p.statusBarChars = utils::red("");
+  p.rebuild();
+  p.update();
+  std::this_thread::sleep_for(delay);
+  p.statusBarChars = utils::green("");
+  p.rebuild();
+  p.update();
+  std::this_thread::sleep_for(delay);
+  p.statusBarChars = utils::blue("");
+  p.rebuild();
+  p.update();
+  std::this_thread::sleep_for(delay);
+  p.statusBarChars = utils::cyan("");
+  p.rebuild();
+  p.update();
+
+  auto total = 10;
+  auto i = 0;
+  for (i = 0; i < total; i++) {
+    p.statusBar = utils::parse(fmt::format(
+        "Printed lines: <yellow>{}</yellow>/<b><green>{}</green></b>", i + 1,
+        total));
+    p.println("one more line: {}", i);
+    std::this_thread::sleep_for(delay);
+  }
+  for (i = total - 1; i >= 0; i--) {
+    p.statusBar = utils::parse(fmt::format(
+        "Printed lines: <yellow>{}</yellow>/<b><green>{}</green></b>", i,
+        total));
+    p.update();
+    utils::saveCursor();
+    utils::up(i + 2);
+    utils::clearLine();
+    utils::restoreCursor();
+    std::this_thread::sleep_for(delay);
+  }
+}
+
+int main() {
+  formatting();
+  rules();
+  markup();
+  printer();
+  gutter();
+  numbered();
+  comments();
+  vt();
+  statusbar();
 }
