@@ -75,6 +75,24 @@ public:
     return rule(l, l_color, false) + rule(r, r_color, end_line);
   }
 
+  static std::string highlight(std::string text) {
+
+    std::regex b_re(R"([\{\}]+)");
+    std::regex p_re("([.,:\"]+)");
+    std::regex q_re("\"(.+)\"");
+    std::regex n_re("([0-9]+)");
+    auto p_sub = utils::gray("$0");
+    auto q = utils::gray("\"");
+    auto q_sub = q + utils::green("$1") + q;
+    auto n_sub = utils::blue("$0");
+    auto b_sub = utils::bold(utils::yellow("$0"));
+    text = std::regex_replace(text, n_re, n_sub);
+    text = std::regex_replace(text, b_re, b_sub);
+    text = std::regex_replace(text, q_re, q_sub);
+    text = std::regex_replace(text, p_re, p_sub);
+    return std::string(text);
+  }
+
   static std::string parse(std::string_view text) {
     parser parser(R"(
         ROOT      <- CONTENT
@@ -550,6 +568,16 @@ public:
     for (auto l : lines) {
       Printer::println(l);
     }
+  }
+};
+
+class HighlightPrinter : public RawPrinter {
+public:
+  HighlightPrinter(int i = 0) : RawPrinter(i) {}
+  template <typename S, typename... Args>
+  void println(const S &fmt_string, const Args &... args) {
+    auto text = utils::highlight(fmt_string);
+    RawPrinter::println(text);
   }
 };
 

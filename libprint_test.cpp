@@ -317,10 +317,11 @@ int main() {
   // vt();
   // statusbar();
 
-  auto p = Printer(1);
+  auto p = RawPrinter(1);
+  auto h = HighlightPrinter(1);
   p.gutter.enabled = true;
   p.gutter.push(utils::color(fmt::color::aqua, "  │      "));
-  // p.println("{\n\t\"hum\": 40.22,\n\t\"lux\": 97.5,\n\t\"temp\": 22.91\n}\n");
-  p.println("demo");
+  p.println("{\n\t\"hum\": 40.22,\n\t\"lux\": 97.5,\n\t\"temp\": 22.91\n}\n");
   p.gutter.pop();
+  h.println("{\n\t\"hum\": 40.22,\n\t\"lux\": 97.5,\n\t\"temp\": 22.91\n}\n");
 }
