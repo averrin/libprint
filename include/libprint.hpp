@@ -534,7 +534,7 @@ public:
 
 class RawPrinter : public Printer {
 public:
-  RawPrinter() : Printer() {
+  RawPrinter(int i = 0) : Printer(i) {
     markup = false;
     raw = true;
   }
