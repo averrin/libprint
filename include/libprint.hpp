@@ -78,17 +78,20 @@ public:
   static std::string highlight(std::string text) {
 
     std::regex b_re(R"([\{\}]+)");
-    std::regex p_re("([.,:\"]+)");
-    std::regex q_re("\"(.+)\"");
-    std::regex n_re("([0-9]+)");
+    std::regex p_re("([,:]+)");
+    std::regex q_re("\"([^:]+)\"");
+    std::regex k_re("(.*):");
+    std::regex n_re(": ([0-9.]+)");
     auto p_sub = utils::gray("$0");
     auto q = utils::gray("\"");
-    auto q_sub = q + utils::green("$1") + q;
-    auto n_sub = utils::blue("$0");
+    auto q_sub = "\"" + utils::green("$1") + "\"";
+    auto k_sub = utils::bold("$1") + ":";
+    auto n_sub = ": " + utils::blue("$1");
     auto b_sub = utils::bold(utils::yellow("$0"));
     text = std::regex_replace(text, n_re, n_sub);
     text = std::regex_replace(text, b_re, b_sub);
     text = std::regex_replace(text, q_re, q_sub);
+    text = std::regex_replace(text, k_re, k_sub);
     text = std::regex_replace(text, p_re, p_sub);
     return std::string(text);
   }
