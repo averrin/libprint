@@ -472,7 +472,7 @@ public:
   void print(const S &fmt_string, const Args &... args) {
     if (fmt_string == "")
       return;
-    auto msg = fmt_string;
+    std::string msg = fmt_string;
     if (!raw) {
       msg = fmt::format(fmt_string, std::forward<const Args &>(args)...);
     }
