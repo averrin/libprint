@@ -200,7 +200,7 @@ void gutter() {
   p.gutter.pop();
 
   p.println(utils::rule(60, fmt::rgb(70, 70, 70), false, true));
-  helpers::with_gutter({4, utils::magenta("│"), Align::LEFT},
+  helpers::with_gutter({2, utils::magenta("│"), Align::LEFT},
                        "<b><color=#ffd700>Header text</color></b>",
                        fmt::format("<i><color=#505050>{}</color></i>", tstamp));
 }
@@ -307,16 +307,20 @@ void statusbar() {
 }
 
 int main() {
-  formatting();
-  rules();
-  markup();
-  printer();
+  // formatting();
+  // rules();
+  // markup();
+  // printer();
   gutter();
-  numbered();
-  comments();
-  vt();
-  statusbar();
+  // numbered();
+  // comments();
+  // vt();
+  // statusbar();
 
-  auto j = RawPrinter();
-  j.println("{\n\"hum\": 40.22,\n\"lux\": 97.5,\n\"temp\": 22.91\n}\n");
+  auto p = Printer(1);
+  p.gutter.enabled = true;
+  p.gutter.push(utils::color(fmt::color::aqua, "  │      "));
+  // p.println("{\n\t\"hum\": 40.22,\n\t\"lux\": 97.5,\n\t\"temp\": 22.91\n}\n");
+  p.println("demo");
+  p.gutter.pop();
 }

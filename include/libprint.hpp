@@ -360,7 +360,7 @@ public:
 
   void push(std::string c) {
     auto s = states.top();
-    states.push(State{s.width, c, s.align, s.bgColor});
+    states.push(State{utils::realLength(c), c, s.align, s.bgColor});
   }
 
   void push(Align a) {
@@ -414,7 +414,7 @@ public:
   bool enabled = true;
   Gutter(std::string c = "", int w = 0, Align a = Align::MIDDLE,
          fmt::detail::color_type bg = fmt::detail::color_type{}) {
-    states.push(State{w, c, a, bg});
+    states.push(State{w == 0 ? utils::realLength(c) : w, c, a, bg});
   }
 };
 
