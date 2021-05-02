@@ -534,7 +534,7 @@ public:
 
 class RawPrinter : public Printer {
 public:
-  JSONPrinter() : Printer() {
+  RawPrinter() : Printer() {
     markup = false;
     raw = true;
   }
@@ -553,7 +553,7 @@ public:
   }
 };
 
-class RawPrinter : public Printer {
+class JSONPrinter : public Printer {
 public:
   fmt::detail::color_type fgColor = fmt::rgb(70, 70, 70);
   std::string mark = "//";
