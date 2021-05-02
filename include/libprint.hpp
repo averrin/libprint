@@ -479,7 +479,11 @@ public:
     if (markup) {
       msg = utils::parse(msg);
     }
-    fmt::print(msg);
+    if (!raw) {
+      fmt::print(msg);
+    } else {
+      std::cout << msg;
+    }
   }
 
   void println() { println(""); }
