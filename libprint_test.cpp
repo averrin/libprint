@@ -316,4 +316,7 @@ int main() {
   comments();
   vt();
   statusbar();
+
+  auto j = RawPrinter();
+  j.println("{\n\"hum\": 40.22,\n\"lux\": 97.5,\n\"temp\": 22.91\n}\n");
 }

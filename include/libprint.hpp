@@ -532,7 +532,28 @@ public:
   }
 };
 
-class CommentPrinter : public Printer {
+class RawPrinter : public Printer {
+public:
+  JSONPrinter() : Printer() {
+    markup = false;
+    raw = true;
+  }
+  template <typename S, typename... Args>
+  void println(const S &fmt_string, const Args &... args) {
+    std::string l;
+    auto n = 0;
+    std::stringstream ss(fmt_string);
+    std::vector<std::string> lines;
+    while (std::getline(ss, l, '\n')) {
+      lines.push_back(l);
+    }
+    for (auto l : lines) {
+      Printer::println(l);
+    }
+  }
+};
+
+class RawPrinter : public Printer {
 public:
   fmt::detail::color_type fgColor = fmt::rgb(70, 70, 70);
   std::string mark = "//";
