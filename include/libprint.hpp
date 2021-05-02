@@ -553,7 +553,7 @@ public:
   }
 };
 
-class JSONPrinter : public Printer {
+class CommentPrinter : public Printer {
 public:
   fmt::detail::color_type fgColor = fmt::rgb(70, 70, 70);
   std::string mark = "//";
