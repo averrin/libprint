@@ -426,6 +426,7 @@ public:
   Gutter indentGutter = Gutter();
   void setGutter(Gutter g) { gutter = g; }
   void removeGutter() { gutter = Gutter(); }
+  bool markup = true;
 
   template <typename S, typename... Args>
   void markLine(fmt::detail::color_type color, std::string mark,
@@ -470,8 +471,11 @@ public:
   void print(const S &fmt_string, const Args &... args) {
     if (fmt_string == "")
       return;
-    fmt::print(utils::parse(
-        fmt::format(fmt_string, std::forward<const Args &>(args)...)));
+    auto msg = fmt::format(fmt_string, std::forward<const Args &>(args)...);
+    if (markup) {
+      msg = utils::parse(msg);
+    }
+    fmt::print(msg);
   }
 
   void println() { println(""); }
