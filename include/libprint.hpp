@@ -79,7 +79,7 @@ public:
 
     std::regex b_re(R"([\{\}]+)");
     std::regex p_re("([,:]+)");
-    std::regex q_re("\"([^:]+)\"");
+    std::regex q_re(R"(\"([^\":]+)\")");
     std::regex k_re("(.*):");
     std::regex n_re(": ([0-9.]+)");
     auto p_sub = utils::gray("$0");
