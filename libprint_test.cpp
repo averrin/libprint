@@ -1,4 +1,4 @@
-#include "libprint.hpp"
+#include "include/libprint/libprint.hpp"
 #include <string>
 #include <thread>
 
@@ -307,15 +307,15 @@ void statusbar() {
 }
 
 int main() {
-  // formatting();
-  // rules();
-  // markup();
-  // printer();
+  formatting();
+  rules();
+  markup();
+  printer();
   gutter();
-  // numbered();
-  // comments();
-  // vt();
-  // statusbar();
+  numbered();
+  comments();
+  vt();
+  statusbar();
 
   auto p = RawPrinter(1);
   auto h = HighlightPrinter(1);
