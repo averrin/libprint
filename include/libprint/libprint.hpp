@@ -1,7 +1,6 @@
 #ifndef __LIBPRINT_H_
 #define __LIBPRINT_H_
 
-#include "indicators.hpp"
 #include "peglib.h"
 #include <chrono>
 #include <codecvt>
@@ -196,19 +195,19 @@ public:
 
   template <typename S, typename... Args>
   static std::string color(fmt::detail::color_type c, const S &fmt_string,
-                           const Args &... args) {
+                           const Args &...args) {
     return fmt::format(fmt::fg(c), fmt_string,
                        std::forward<const Args &>(args)...);
   }
   template <typename S, typename... Args>
   static std::string bg(fmt::detail::color_type c, const S &fmt_string,
-                        const Args &... args) {
+                        const Args &...args) {
     return fmt::format(fmt::bg(c), fmt_string,
                        std::forward<const Args &>(args)...);
   }
   template <typename S, typename... Args>
   static std::string style(fmt::text_style c, const S &fmt_string,
-                           const Args &... args) {
+                           const Args &...args) {
     return fmt::format(c, fmt_string, std::forward<const Args &>(args)...);
   }
 
@@ -452,10 +451,10 @@ public:
 
   template <typename S, typename... Args>
   void markLine(fmt::detail::color_type color, std::string mark,
-                const S &fmt_string, const Args &... args) {}
+                const S &fmt_string, const Args &...args) {}
 
   template <typename S, typename... Args>
-  void markLine(std::string mark, const S &fmt_string, const Args &... args) {
+  void markLine(std::string mark, const S &fmt_string, const Args &...args) {
     // markLine(fmt::detail::color_type{}, fmt_string, std::forward<const Args
     // &>(args)...);
     if (rightGutter.enabled) {
@@ -477,7 +476,7 @@ public:
   }
   template <typename S, typename... Args>
   void markLine(fmt::detail::color_type color, const S &fmt_string,
-                const Args &... args) {
+                const Args &...args) {
     if (leftGutter.enabled) {
       leftGutter.push(utils::color(color, "▏"));
       println(fmt_string, std::forward<const Args &>(args)...);
@@ -490,7 +489,7 @@ public:
   }
 
   template <typename S, typename... Args>
-  void print(const S &fmt_string, const Args &... args) {
+  void print(const S &fmt_string, const Args &...args) {
     if (fmt_string == "")
       return;
     std::string msg = fmt_string;
@@ -517,7 +516,7 @@ public:
   }
 
   template <typename S, typename... Args>
-  void println(const S &fmt_string, const Args &... args) {
+  void println(const S &fmt_string, const Args &...args) {
     printGutters();
     print(fmt_string, std::forward<const Args &>(args)...);
     std::cout << std::endl;
@@ -538,7 +537,7 @@ public:
   fmt::detail::color_type fgColor = fmt::rgb(80, 80, 80);
 
   template <typename S, typename... Args>
-  void println(const S &fmt_string, const Args &... args) {
+  void println(const S &fmt_string, const Args &...args) {
     linenum++;
     if (linenum < 100)
       gutter.states.top().width = 2;
@@ -560,7 +559,7 @@ public:
     raw = true;
   }
   template <typename S, typename... Args>
-  void println(const S &fmt_string, const Args &... args) {
+  void println(const S &fmt_string, const Args &...args) {
     std::string l;
     auto n = 0;
     std::stringstream ss(fmt_string);
@@ -578,7 +577,7 @@ class HighlightPrinter : public RawPrinter {
 public:
   HighlightPrinter(int i = 0) : RawPrinter(i) {}
   template <typename S, typename... Args>
-  void println(const S &fmt_string, const Args &... args) {
+  void println(const S &fmt_string, const Args &...args) {
     auto text = utils::highlight(fmt_string);
     RawPrinter::println(text);
   }
@@ -593,7 +592,7 @@ public:
   std::string blockMark3 = " */";
 
   template <typename S, typename... Args>
-  void println(const S &fmt_string, const Args &... args) {
+  void println(const S &fmt_string, const Args &...args) {
     auto m = utils::italic(utils::color(fgColor, mark));
     setGutter(Gutter(m, mark.size()));
     auto line = fmt::format(fmt_string, std::forward<const Args &>(args)...);
@@ -602,7 +601,7 @@ public:
   }
 
   template <typename S, typename... Args>
-  void printBlock(const S &fmt_string, const Args &... args) {
+  void printBlock(const S &fmt_string, const Args &...args) {
     std::string l;
     auto line = fmt::format(fmt_string, std::forward<const Args &>(args)...);
     auto n = 0;
@@ -644,7 +643,7 @@ public:
                               barWidth / utils::realLength(statusBarChars));
   }
   template <typename S, typename... Args>
-  void println(const S &fmt_string, const Args &... args) {
+  void println(const S &fmt_string, const Args &...args) {
     utils::up();
     utils::clearLine();
     Printer::println(fmt_string, std::forward<const Args &>(args)...);
@@ -658,7 +657,7 @@ public:
 };
 
 namespace helpers {
-template <typename... Lines> void quote(const Lines &... args) {
+template <typename... Lines> void quote(const Lines &...args) {
   auto p = Printer(1);
   p.gutter.push(1, "┃", Align::MIDDLE);
   std::vector<std::string> lines = {args...};
@@ -667,7 +666,7 @@ template <typename... Lines> void quote(const Lines &... args) {
   }
 }
 
-template <typename... Lines> void indent(int i, const Lines &... args) {
+template <typename... Lines> void indent(int i, const Lines &...args) {
   auto p = Printer(i);
   std::vector<std::string> lines = {args...};
   for (auto line : lines) {
@@ -675,7 +674,7 @@ template <typename... Lines> void indent(int i, const Lines &... args) {
   }
 }
 
-template <typename... Lines> void comment(const Lines &... args) {
+template <typename... Lines> void comment(const Lines &...args) {
   auto p = CommentPrinter();
   std::vector<std::string> lines = {args...};
   for (auto line : lines) {
@@ -684,7 +683,7 @@ template <typename... Lines> void comment(const Lines &... args) {
 }
 
 template <typename M, typename... Lines>
-void with_gutter(const M m, const Lines &... args) {
+void with_gutter(const M m, const Lines &...args) {
   auto p = Printer();
   p.gutter.push(m);
   std::vector<std::string> lines = {args...};
@@ -694,7 +693,7 @@ void with_gutter(const M m, const Lines &... args) {
 }
 
 template <typename... Lines>
-void with_gutter(const Gutter::State s, const Lines &... args) {
+void with_gutter(const Gutter::State s, const Lines &...args) {
   auto p = Printer();
   p.gutter.states.push(s);
   std::vector<std::string> lines = {args...};
@@ -703,8 +702,7 @@ void with_gutter(const Gutter::State s, const Lines &... args) {
   }
 }
 
-template <typename... Lines>
-void numbered(const int sn, const Lines &... args) {
+template <typename... Lines> void numbered(const int sn, const Lines &...args) {
   auto p = NumberedPrinter();
   p.linenum = sn - 1;
   p.rightGutter.enabled = true;
@@ -716,7 +714,7 @@ void numbered(const int sn, const Lines &... args) {
 }
 
 template <typename... Lines>
-void aligned(const Align align, const int width, const Lines &... args) {
+void aligned(const Align align, const int width, const Lines &...args) {
   auto p = Printer();
   std::vector<std::string> lines = {args...};
   for (auto content : lines) {
