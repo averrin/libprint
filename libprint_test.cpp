@@ -1,3 +1,4 @@
+#define PARSE_OPERATOR
 #include "include/libprint/libprint.hpp"
 #include <string>
 #include <thread>
