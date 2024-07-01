@@ -1,6 +1,4 @@
-#ifndef __LIBPRINT_H_
-#define __LIBPRINT_H_
-
+#pragma once
 #include "peglib.h"
 #include <chrono>
 #include <codecvt>
@@ -735,12 +733,8 @@ void aligned(const Align align, const int width, const Lines &...args) {
 }
 
 } // namespace helpers
-#ifdef PARSE_OPERATOR
 std::string operator""_p(const char *str, std::size_t len) {
   return utils::parse(str);
 }
-#endif
 
 } // namespace LibPrint
-
-#endif // __LIBPRINT_H_
