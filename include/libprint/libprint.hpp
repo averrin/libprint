@@ -418,13 +418,13 @@ public:
     auto f = content.size() - utils::stripEsc(content).size();
     switch (align) {
     case Align::LEFT:
-      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format("{:<{}}", content, width + f))));
+      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format(fmt::runtime("{:<{}}"), content, width + f))));
       break;
     case Align::MIDDLE:
-      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format("{:^{}}", content, width + f))));
+      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format(fmt::runtime("{:^{}}"), content, width + f))));
       break;
     case Align::RIGHT:
-      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format("{:>{}}", content, width + f))));
+      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format(fmt::runtime("{:>{}}"), content, width + f))));
       break;
     } // namespace LibPrint
   }
