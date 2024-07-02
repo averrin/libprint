@@ -60,8 +60,8 @@ public:
        fmt::detail::color_type rule_color = fmt::terminal_color::white,
        bool end_line = true, bool thin = false) {
     return fmt::format(
-        utils::color(rule_color, utils::bold(thin ? "{:─^{}}{}" : "{:━^{}}{}",
-                                             "", l, end_line ? "\n" : "")));
+        fmt::runtime(utils::color(rule_color, utils::bold(thin ? "{:─^{}}{}" : "{:━^{}}{}",
+                                             "", l, end_line ? "\n" : ""))));
   }
 
   static std::string
@@ -177,7 +177,7 @@ public:
         }
       }
       content += process_node(node->nodes[1], style);
-      content = fmt::format(style, content);
+      content = fmt::format(style, fmt::runtime(content));
       // fmt::print("ELEMENT -> <{}>{}</{}>\n", tag, content,
       //            node->nodes[2]->token);
     } else if (node->name == "CONTENT") {
@@ -194,19 +194,19 @@ public:
   template <typename S, typename... Args>
   static std::string color(fmt::detail::color_type c, const S &fmt_string,
                            const Args &...args) {
-    return fmt::format(fmt::fg(c), fmt_string,
+    return fmt::format(fmt::fg(c), fmt::runtime(fmt_string),
                        std::forward<const Args &>(args)...);
   }
   template <typename S, typename... Args>
   static std::string bg(fmt::detail::color_type c, const S &fmt_string,
                         const Args &...args) {
-    return fmt::format(fmt::bg(c), fmt_string,
+    return fmt::format(fmt::bg(c), fmt::runtime(fmt_string),
                        std::forward<const Args &>(args)...);
   }
   template <typename S, typename... Args>
   static std::string style(fmt::text_style c, const S &fmt_string,
                            const Args &...args) {
-    return fmt::format(c, fmt_string, std::forward<const Args &>(args)...);
+    return fmt::format(c, fmt::runtime(fmt_string), std::forward<const Args &>(args)...);
   }
 
   template <typename S, typename... Args>
@@ -418,13 +418,13 @@ public:
     auto f = content.size() - utils::stripEsc(content).size();
     switch (align) {
     case Align::LEFT:
-      fmt::print(utils::bg(bgColor, fmt::format("{:<{}}", content, width + f)));
+      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format("{:<{}}", content, width + f))));
       break;
     case Align::MIDDLE:
-      fmt::print(utils::bg(bgColor, fmt::format("{:^{}}", content, width + f)));
+      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format("{:^{}}", content, width + f))));
       break;
     case Align::RIGHT:
-      fmt::print(utils::bg(bgColor, fmt::format("{:>{}}", content, width + f)));
+      fmt::print(fmt::runtime(utils::bg(bgColor, fmt::format("{:>{}}", content, width + f))));
       break;
     } // namespace LibPrint
   }
@@ -492,13 +492,13 @@ public:
       return;
     std::string msg = fmt_string;
     if (!raw) {
-      msg = fmt::format(fmt_string, std::forward<const Args &>(args)...);
+      msg = fmt::format(fmt::runtime(fmt_string), std::forward<const Args &>(args)...);
     }
     if (markup) {
       msg = utils::parse(msg);
     }
     if (!raw) {
-      fmt::print(msg);
+      fmt::print(fmt::runtime(msg));
     } else {
       std::cout << msg;
     }
@@ -593,7 +593,7 @@ public:
   void println(const S &fmt_string, const Args &...args) {
     auto m = utils::italic(utils::color(fgColor, mark));
     setGutter(Gutter(m, mark.size()));
-    auto line = fmt::format(fmt_string, std::forward<const Args &>(args)...);
+    auto line = fmt::format(fmt::runtime(fmt_string), std::forward<const Args &>(args)...);
     line = utils::italic(utils::color(fgColor, line));
     Printer::println(line);
   }
@@ -601,7 +601,7 @@ public:
   template <typename S, typename... Args>
   void printBlock(const S &fmt_string, const Args &...args) {
     std::string l;
-    auto line = fmt::format(fmt_string, std::forward<const Args &>(args)...);
+    auto line = fmt::format(fmt::runtime(fmt_string), std::forward<const Args &>(args)...);
     auto n = 0;
     std::stringstream ss(line);
     std::vector<std::string> lines;

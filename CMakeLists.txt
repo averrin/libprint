@@ -5,7 +5,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 project(libprint)
 set( EXE_NAME ${PROJECT_NAME} )
 
-set(FMT_VERSION 7.0.0)
+set(FMT_VERSION 11.0.0)
 include(cmake/CPM.cmake)
 CPMAddPackage("gh:fmtlib/fmt#${FMT_VERSION}")
 

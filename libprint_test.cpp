@@ -27,20 +27,20 @@ void formatting() {
           fmt::format(fmt::fg(fmt::terminal_color::blue), "{}", 2),
           fmt::format(fmt::fg(fmt::terminal_color::green), "{}", 2 + 2)));
   fmt::print(
-      utils::gray("  //same styling bug in original fmtlib implementation\n"));
+      fmt::runtime(utils::gray("  //same styling bug in original fmtlib implementation\n")));
 }
 
 void rules() {
   utils::h1("RULES");
-  fmt::print(utils::rule(57));
+  fmt::print(fmt::runtime(utils::rule(57)));
   auto l = 50;
   for (int n = 0; n < 6; n++) {
     fmt::print("{:>5}% ", n * 20);
-    fmt::print(utils::stacked(n * 10, l - n * 10, fmt::color::orange));
+    fmt::print(fmt::runtime(utils::stacked(n * 10, l - n * 10, fmt::color::orange)));
   }
-  fmt::print(
-      utils::stacked(25, 25, fmt::color::white, fmt::color::dark_gray, false));
-  fmt::print(utils::rule(7, fmt::color::dim_gray));
+  fmt::print(fmt::runtime(
+      utils::stacked(25, 25, fmt::color::white, fmt::color::dark_gray, false)));
+  fmt::print(fmt::runtime(utils::rule(7, fmt::color::dim_gray)));
 
   utils::h2("Headers");
   utils::h1("H1");
@@ -54,43 +54,43 @@ void rules() {
 void markup() {
   utils::h1("MARKUP");
   utils::h2("Style");
-  fmt::print(utils::parse(
-      "<b>bold</b> <u>underline</u> <i>italic</i> <s>strike</s>\n"));
+  fmt::print(fmt::runtime(utils::parse(
+      "<b>bold</b> <u>underline</u> <i>italic</i> <s>strike</s>\n")));
   utils::h2("Terminal colors");
-  fmt::print(utils::parse(
+  fmt::print(fmt::runtime(utils::parse(
       "<red>red</red> <black>black</black> "
       "<green>green</green> <blue>blue</blue> <yellow>yellow</yellow> "
-      "<cyan>cyan</cyan> <gray>gray</gray>\n"));
-  fmt::print("<b><red>red</red> <black>black</black> "
+      "<cyan>cyan</cyan> <gray>gray</gray>\n")));
+  fmt::print(fmt::runtime("<b><red>red</red> <black>black</black> "
              "<green>green</green> <blue>blue</blue> <yellow>yellow</yellow> "
-             "<cyan>cyan</cyan> <gray>gray</gray></b>\n"_p);
+             "<cyan>cyan</cyan> <gray>gray</gray></b>\n"_p));
 
   utils::h2("Hex colors");
-  fmt::print(
+  fmt::print(fmt::runtime(
       "<b><color=#11ff11>#11ff11</color> "
-      "<color=#ff1111>#ff1111</color></b> <color=#aa11bb>#aa11bb</color>\n"_p);
-  fmt::print("<b><bgcolor=#11ff11>#11ff11</bgcolor> "
+      "<color=#ff1111>#ff1111</color></b> <color=#aa11bb>#aa11bb</color>\n"_p));
+  fmt::print(fmt::runtime("<b><bgcolor=#11ff11>#11ff11</bgcolor> "
              "<bgcolor=#ff1111>#ff1111</bgcolor></b> "
-             "<bgcolor=#aa11bb>#aa11bb</bgcolor>\n"_p);
+             "<bgcolor=#aa11bb>#aa11bb</bgcolor>\n"_p));
 
-  fmt::print("<b><bgcolor=#eeeeee>"
+  fmt::print(fmt::runtime("<b><bgcolor=#eeeeee>"
              "<color=#222222> black on white </color></bgcolor></b>"
              " <b><bgcolor=#11ff11>"
-             "<color=#ff1111> red on green </color></bgcolor></b>\n"_p);
+             "<color=#ff1111> red on green </color></bgcolor></b>\n"_p));
 
   utils::h2("Other");
   fmt::print("functions (no nesting):   ");
-  fmt::print(utils::bold("{} {}\n", utils::green("green_bold"),
-                         utils::red("red_bold")));
+  fmt::print(fmt::runtime(utils::bold("{} {}\n", utils::green("green_bold"),
+                         utils::red("red_bold"))));
   fmt::print("fmt (no nesting):         ");
-  fmt::print(fmt::format(
-      fmt::emphasis::bold,
-      fmt::format(
-          "{} {}\n",
-          fmt::format(fmt::fg(fmt::terminal_color::green), "green_bold"),
-          fmt::format(fmt::fg(fmt::terminal_color::red), "red_bold"))));
-  fmt::print("markup (nesting support): <b><green>green_bold</green> "
-             "<red>red_bold</red></b>\n"_p);
+  // fmt::print(fmt::format(
+  //     fmt::emphasis::bold,
+  //     fmt::format(
+  //         "{} {}\n",
+  //         fmt::format(fmt::fg(fmt::terminal_color::green), "green_bold"),
+  //         fmt::format(fmt::fg(fmt::terminal_color::red), "red_bold"))));
+  fmt::print(fmt::runtime("markup (nesting support): <b><green>green_bold</green> "
+             "<red>red_bold</red></b>\n"_p));
   fmt::print("\n");
 };
 
