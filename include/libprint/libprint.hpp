@@ -36,23 +36,23 @@ public:
       os << s;
     return os.str();
   }
-  static void br() { fmt::print("\n"); }
-  static void up(int n = 1) { fmt::print("\e[{}A", n); }
-  static void clearLine() { fmt::print("\e[2K"); }
+  static void br() { fmt::print(fmt::runtime("\n")); }
+  static void up(int n = 1) { fmt::print(fmt::runtime("\e[{}A"), n); }
+  static void clearLine() { fmt::print(fmt::runtime("\e[2K")); }
 
-  static void saveCursor() { fmt::print("\e7"); }
-  static void restoreCursor() { fmt::print("\e8"); }
+  static void saveCursor() { fmt::print(fmt::runtime("\e7")); }
+  static void restoreCursor() { fmt::print(fmt::runtime("\e8")); }
 
   static void h1(std::string text) {
-    fmt::print("\n{:━^80}\n\n", utils::bold(" {} ", text));
+    fmt::print(fmt::runtime("\n{:━^80}\n\n"), utils::bold(" {} ", text));
   }
 
   static void h2(std::string text) {
-    fmt::print("\n━━{:━<78}\n\n", utils::bold(" {} ", text));
+    fmt::print(fmt::runtime("\n━━{:━<78}\n\n"), utils::bold(" {} ", text));
   }
 
   static void h3(std::string text) {
-    fmt::print("──{:─<78}\n", utils::bold(" {} ", text));
+    fmt::print(fmt::runtime("──{:─<78}\n"), utils::bold(" {} ", text));
   }
 
   static std::string
