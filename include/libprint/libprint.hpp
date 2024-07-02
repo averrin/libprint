@@ -733,8 +733,8 @@ void aligned(const Align align, const int width, const Lines &...args) {
 }
 
 } // namespace helpers
-std::string operator""_p(const char *str, std::size_t len) {
-  return utils::parse(str);
-}
+// std::string operator""_p(const char *str, std::size_t len) {
+//   return utils::parse(str);
+// }
 
 } // namespace LibPrint
