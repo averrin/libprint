@@ -355,7 +355,7 @@ public:
     return std::regex_replace(str, esc_re, "");
   }
 
-  static constexpr fmt::detail::color_type NOCOLOR = fmt::detail::color_type{};
+  // static constexpr fmt::detail::color_type NOCOLOR = fmt::detail::color_type{};
 }; // namespace LibLog
 
 enum class Align { LEFT, MIDDLE, RIGHT };
@@ -367,7 +367,7 @@ public:
     int width = 0;
     std::string content = "";
     Align align = Align::MIDDLE;
-    fmt::detail::color_type bgColor = utils::NOCOLOR;
+    fmt::detail::color_type bgColor;
   };
   std::stack<State> states;
 
